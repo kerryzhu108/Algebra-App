@@ -1,0 +1,11 @@
+This program is designed for the practice and visualization of what happens to numbers
+when they are being moved around in an algebraic equation. (Still very buggy)
+
+Random Equation: Generates a random equation with an unknown x variable to solve.
+Random Length: Generates an even more random equation but of desired length.
+Custom Equation: Type a custom equation to generate.
+
+Numbers can be dragged around via clicking.
+Groups of numbers may be simplified by clicking the select box and highlighting the numbers.
+Press Z to undo action, R to redo action.
+Answer button reveals final answer.
