@@ -1,2 +1,5 @@
 ECHO is on.
 setup.py
+.idea
+venv
+__pycache__
