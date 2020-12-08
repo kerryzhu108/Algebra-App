@@ -1,4 +1,4 @@
-This program is designed for the practice and visualization of what happens to numbers
+This program was made to help visualizate what happens to numbers
 when they are being moved around in an algebraic equation. (Still very buggy)
 
 Random Equation: Generates a random equation with an unknown x variable to solve.
