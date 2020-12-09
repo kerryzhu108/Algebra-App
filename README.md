@@ -1,16 +1,16 @@
 # Algebra Visualizer
-The goal of this project is to create an educational tool for visual math learners by
-allowing users to interact with numbers and solve algebraic equations their own way.
+The app aims to help visual learners with algebra by applying bedmas rules for users as they experiment
+with moving different numbers around.
 
 ## Setup
-Only required library is Pygame, run code from either "menu.py" or "maingame.py" 			     						   
+Only required library is Pygame, run code from Main.py			     						   
 
 ## Current features
 Highlight box that simplifies selected group of numbers, undo/redo commands, 
 custom equations, random equation generator.
 
 ## Technologies
-The program is being coded in Python using the Pygame library.
+Coded in Python using the Pygame library.
 
 ## Status
 Currently in alpha, very buggy and prone to errors such as miscalculations and divison signs not appearing.
