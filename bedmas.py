@@ -1,6 +1,6 @@
 import random
 """
-Credit for this file: Liam Ogilvie 
+Helper for this file: Liam Ogilvie 
 """
 
 
@@ -62,6 +62,7 @@ def listmas(expr: list) -> list:
     # precondition: list is a valid expression
     # [C] Liam Ogilvie
     # After the May rewrite, it's extremely messy, consider this a warning.
+    """Preforms bedmas on list"""
     expr = cleanerupper(expr)
     expr2 = []
     for element in expr:
