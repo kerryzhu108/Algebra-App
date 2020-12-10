@@ -3,8 +3,7 @@ The app aims to help visual learners with algebra by applying bedmas rules for u
 with moving different numbers around.
 
 ## Setup
-Run code from Main.py	
-Required libraries: Pygame, requests, importlib, urllib.parse		     						   
+Run code from main.py	     						   
 
 ## Current features
 Highlight box that simplifies selected group of numbers, undo/redo commands, 

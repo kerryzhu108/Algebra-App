@@ -1,31 +1,18 @@
 import pygame
-import bedmas
 import helpers
 import buttons
 import menu
+from gui_settings import font
 from typing import Union
-
-equation_and_sol = helpers.get_equation()
-# preset equation that may be replaced by random equation
-equation = equation_and_sol[0]
-bedmas.answer = equation_and_sol[1]
-if menu.equation and menu.equation[0] == 'generate equation':
-    # generates completely random equation of desired length
-    equation = bedmas.equation_gen(menu.equation[1]-1)
-elif menu.equation:
-    # if user provided valid equation, use it instead
-    equation.clear()
-    equation.extend(menu.equation)
-
-font = pygame.font.Font('freesansbold.ttf', 32)
 
 
 class Player(pygame.sprite.Sprite):  # properties of the numbers
+    """ Numbers, operators and their properties """
     position_x = 200  # initial position of first number sprite
     position_y = 300
 
     def __init__(self, numb: Union[float, str]):
-        """Spawns number and assigns it various qualities"""
+        """Constructs number and assigns it various qualities"""
         pygame.sprite.Sprite.__init__(self)
         self.number = str(numb)
         self.left_sign = ' '
@@ -138,6 +125,11 @@ class Player(pygame.sprite.Sprite):  # properties of the numbers
         helpers.update_side(self)
 
 
+eq_set = helpers.get_equation(menu.equation)  # generates equation or gets one from user
+equation = eq_set[0]
+answer = eq_set[1]
+
+
 numbers = pygame.sprite.Group()  # numbers sprite group for updating/drawing
 equal_sign = None
 reached_eq_sign = False  # flag for assigning side attribute
@@ -182,6 +174,9 @@ for index in range(len(equation)):
         else:
             num.side = 'right'
 
+past_position = -1  # keeps track of selected sprite's position
+present_position = -1
+
 new_div_sprites = []  # stores all newly spawned sprites from moving multiplication too early
 causer_sprite = []  # stores the sprite that caused the new_div_sprites to spawn
 
@@ -202,5 +197,3 @@ history_index = [-1]
 
 helpers.store_info(numbers, bracket_nums, history, history_index, False)
 # stores all sprites' info into their history for undo/redo on initialization
-
-menu.equation.clear()  # gets rid of entered custom equation if return to menu

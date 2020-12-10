@@ -1,19 +1,17 @@
 import pygame
-import bedmas
 import buttons
 import helpers
 import nums
 import importlib
-import GUISettings
+import gui_settings
 
-"""Running application main loop"""
+"""Running application's main loop"""
 running = True
-past = -1  # check if a sprite crosses equal sign
-present = -1
 
-selected = nums.numbers.sprites()[0]  # selected number/sprite
-
-while running:
+while running:  # main game loop
+    past = nums.past_position
+    present = nums.present_position
+    selected = nums.numbers.sprites()[0]  # selected number
     for event in pygame.event.get():
         past = present
         present = selected.rect.x
@@ -26,7 +24,7 @@ while running:
                 helpers.get_info(nums.history, nums.history_index, 1, nums.numbers, nums.bracket_nums)
             elif event.key == pygame.K_ESCAPE:
                 # return to main menu from game
-                nums.menu.menu(GUISettings.width, GUISettings.height, helpers.grey)
+                nums.menu.menu(gui_settings.width, gui_settings.height, helpers.grey)
                 importlib.reload(buttons)
                 importlib.reload(nums)
 
@@ -47,7 +45,7 @@ while running:
             elif buttons.next_click_simplify:
                 helpers.simplify(nums.numbers, buttons.select_box.init_pos, nums.equal_sign)
                 # updates error message
-                simplifiable = GUISettings.font.render(helpers.simplifiable[0], True, helpers.white, helpers.grey)
+                simplifiable = gui_settings.font.render(helpers.simplifiable[0], True, helpers.white, helpers.grey)
                 buttons.select_box.init_pos = (-1, -1)
                 buttons.next_click_simplify = False
 
@@ -92,7 +90,7 @@ while running:
                     if button == buttons.answer:  # if click on answer button, remove all number sprites
                         helpers.store_info(nums.numbers, nums.bracket_nums, nums.history,
                                            nums.history_index, buttons.spawn_special_div_line)
-                        helpers.remove_and_give_answer(nums.equal_sign, nums.numbers, bedmas.answer)
+                        helpers.remove_and_give_answer(nums.equal_sign, nums.numbers, nums.answer)
                         buttons.spawn_special_div_line = False
                     if button == buttons.select:
                         # if click on select, select box will appear next click
@@ -103,7 +101,7 @@ while running:
             # when number crosses equal sign
             selected.event_handler()
     # draw
-    screen = GUISettings.screen
+    screen = gui_settings.screen
     screen.fill(helpers.grey)  # background colour
     selected.update()  # updates selected sprite
     buttons.select_box.update_box(screen)  # updates highlight box
@@ -111,7 +109,7 @@ while running:
     buttons.buttons_group.draw(screen)
 
     """On screen messages"""
-    font = GUISettings.font
+    font = gui_settings.font
     return_menu_msg = font.render('Press ESC to return to main menu', True, helpers.light_grey, helpers.grey)
     undo_instr = font.render('Press Z to undo R to redo', True, helpers.light_grey, helpers.grey)
     simplifiable = font.render(helpers.simplifiable[0], True, helpers.light_grey, helpers.grey)

@@ -1,9 +1,7 @@
-from __future__ import annotations
 from typing import Optional
 import pygame
 import math
 import operator
-import bedmas
 import random
 import calculate
 
@@ -134,11 +132,21 @@ def get_bracket_numbers(numbers: list) -> list:
     return numbers[begin:end+1]
 
 
-def get_equation() -> list:
-    """Returns a list containing a list representing a preset equation and
-    a number that represents the value of said equation's x variable.
-    Not used in the truly random equation mode."""
-    eq_pool = [[[3, '•', 'x', '•', 9, '+', 5, '/', 2, '-', 3, '=', 107.5], 4],
+def get_equation(user_equation: list) -> list:
+    """Takes a list that contains information on what equation the user wants.
+    Returns random equation of custom length if given ['gen equation', int(length)]
+    Returns custom equation if the list is a custom equation.
+    Returns a preset equation if user_equation is empty.
+
+    The solution to the x variable will be the second element of the list.
+    ex) [8, '/', 'x', '-', 5 '=', 3], 1]
+    """
+
+    if user_equation and user_equation[0] == "gen equation":
+        return calculate.equation_gen(3)
+    elif user_equation:
+        return user_equation
+    eq_pool = [[[3, '•', 'x', '•', 9, '+', 5, '/', 2, '-', 3, '=', 107], 4],
                [[9, '/', 'x', '+', 6, '+', 2, '•', 7, '•', 4, '=', '-', 49], 3],
                [[2, '•', 8, '/', 'x', '/', 3, '-', 5, '+', 7, '=', 4], 12],
                [[9, '/', 3, '-', 7, '+', 5, '/', 'x', '+', 4, '=', '-', 5], 7],
@@ -272,7 +280,7 @@ def simplify(numbers: 'sprite group', coordinate: tuple, equal_sign: 'sprite obj
     if selected:
         try:
             simplifiable[0] = ""
-            answer = bedmas.listmas(selected)
+            answer = calculate.simplify(selected)
         except (ValueError, TypeError, IndexError):
             simplifiable[0] = "Sorry, encountered unexpected error when trying to simplify"
     # if there are numbers selected and they can be simplified

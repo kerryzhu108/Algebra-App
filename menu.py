@@ -65,9 +65,6 @@ def menu(width: int, height: int, colour: tuple) -> None:
         pygame.display.flip()
 
 
-equation = []  # possible custom equation to display
-
-
 def enter_custom_equation(width: int, height: int, colour: tuple) -> bool:
     """Custom equation screen for user to enter custom equation
     at start of menu. Returns true if successful custom equation entered.
@@ -181,7 +178,7 @@ def random_equation_length(width: int, height: int, colour: tuple) -> bool:
                 length = event.unicode
                 if length.isdigit() and 3 <= int(length) <= 9:
                     equation.clear()
-                    equation.extend(['generate equation', int(length)])
+                    equation.extend(['gen equation', int(float(length))])
                     return True
                 elif event.key == pygame.K_ESCAPE:
 
@@ -196,7 +193,11 @@ def random_equation_length(width: int, height: int, colour: tuple) -> bool:
 
 
 # allows menu to be entered upon initialization
+pygame.init()
 window_width = 1000
 window_height = 600
 background_colour = (48, 48, 48)
+equation = []  # possible custom equation to display
+print(equation)
+
 menu(window_width, window_height, background_colour)

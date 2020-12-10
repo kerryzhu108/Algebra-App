@@ -1,3 +1,5 @@
+import pygame
+
 """Screen Settings"""
 width = 1000
 height = 600
