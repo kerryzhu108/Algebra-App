@@ -198,6 +198,5 @@ window_width = 1000
 window_height = 600
 background_colour = (48, 48, 48)
 equation = []  # possible custom equation to display
-print(equation)
 
 menu(window_width, window_height, background_colour)

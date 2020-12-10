@@ -166,7 +166,6 @@ def get_info(history: list, history_index: list, undo_redo: int, numbers: 'sprit
     if 0 <= history_index[0] + undo_redo < len(history):
         history_index[0] += undo_redo
         history_sprites = []  # for finding which needs to be removed
-        print(bracket_nums, 'right before getting info')
         for sprite_info in history[history_index[0]]:
             num = sprite_info[0]
             history_sprites.append(num)
@@ -280,30 +279,40 @@ def simplify(numbers: 'sprite group', coordinate: tuple, equal_sign: 'sprite obj
     if selected:
         try:
             simplifiable[0] = ""
+            print(selected)
             answer = calculate.simplify(selected)
+            print(answer)
         except (ValueError, TypeError, IndexError):
             simplifiable[0] = "Sorry, encountered unexpected error when trying to simplify"
     # if there are numbers selected and they can be simplified
     if answer:
-        # change some of selected sprites into answer
-        # delete the rest of selected sprites, update everything once
-        i = -1  # direction to iterate from
-        for new in reversed(answer):
-            if isinstance(new, int) or isinstance(new, float) or 'x' in new:
-                selected_sprites[i].number = str(new)
-                selected_sprites[i].left_sign = '  '
-                # aligns with eq sign in case old sprite was denom
-                selected_sprites[i].rect.y = equal_sign.rect.y
-                selected_sprites[i].div_line.update_div_line(None)
-                # shifts extra to make room for potentially longer number
-                selected_sprites[i].rect.x += i/abs(i)*(len(str(new))-1)*9 + 70 * (i+1)
-            elif isinstance(new, str):
-                selected_sprites[i].left_sign = new
-                i += -1
+        i = 0
+        j = 0
+        x = selected_sprites[0].rect.x
+        while i < len(answer):
+            # if its a number, capture the left sign if there is one
+            if isinstance(answer[i], int) or isinstance(answer[i], float) or answer[i] == 'x':
+                selected_sprites[j].number = str(answer[i])
+                selected_sprites[j].left_sign = '  '
+                if i-1 >= 0:
+                    selected_sprites[j].left_sign = str(answer[i-1])
+                # set y to equal sign y unless div
+                selected_sprites[j].rect.y = equal_sign.rect.y
+                selected_sprites[j].div_line.update_div_line(None)
+                print(x)
+                selected_sprites[j].rect.x = x
+                if selected_sprites[j].left_sign == '/':
+                    x += -95
+                    selected_sprites[j].rect.x = x
+                    selected_sprites[j].rect.y = equal_sign.rect.y + 50
+                    selected_sprites[j].div_line.update_div_line(selected_sprites[j])
+                j += 1
+                x += 100
+            i += 1
         # removes extra/unchanged sprites
-        for left_over_sprites in selected_sprites[:i]:
-            left_over_sprites.div_line.update_div_line(None)
-            numbers.remove(left_over_sprites)
+        for left_over_sprite in selected_sprites[j:]:
+            left_over_sprite.div_line.update_div_line(None)
+            numbers.remove(left_over_sprite)
         numbers.update()
 
 
@@ -407,9 +416,3 @@ def update_side(sprite) -> None:
         # then don't want to update its bond's side because it is not following it
         update_side(sprite.bond)
 
-
-"""Colors"""
-black = (0, 0, 0)
-grey = (48, 48, 48)
-light_grey = (131, 139, 139)
-white = (255, 255, 255)

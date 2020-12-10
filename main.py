@@ -3,15 +3,17 @@ import buttons
 import helpers
 import nums
 import importlib
-import gui_settings
+import settings
 
-"""Running application's main loop"""
+"""Keeps track of selected number"""
+past = nums.past_position
+present = nums.present_position
+selected = nums.numbers.sprites()[0]
+
+"""Application's main loop"""
+
 running = True
-
 while running:  # main game loop
-    past = nums.past_position
-    present = nums.present_position
-    selected = nums.numbers.sprites()[0]  # selected number
     for event in pygame.event.get():
         past = present
         present = selected.rect.x
@@ -24,7 +26,7 @@ while running:  # main game loop
                 helpers.get_info(nums.history, nums.history_index, 1, nums.numbers, nums.bracket_nums)
             elif event.key == pygame.K_ESCAPE:
                 # return to main menu from game
-                nums.menu.menu(gui_settings.width, gui_settings.height, helpers.grey)
+                nums.menu.menu(settings.width, settings.height, settings.grey)
                 importlib.reload(buttons)
                 importlib.reload(nums)
 
@@ -45,7 +47,7 @@ while running:  # main game loop
             elif buttons.next_click_simplify:
                 helpers.simplify(nums.numbers, buttons.select_box.init_pos, nums.equal_sign)
                 # updates error message
-                simplifiable = gui_settings.font.render(helpers.simplifiable[0], True, helpers.white, helpers.grey)
+                simplifiable = settings.font.render(helpers.simplifiable[0], True, settings.white, settings.grey)
                 buttons.select_box.init_pos = (-1, -1)
                 buttons.next_click_simplify = False
 
@@ -101,18 +103,18 @@ while running:  # main game loop
             # when number crosses equal sign
             selected.event_handler()
     # draw
-    screen = gui_settings.screen
-    screen.fill(helpers.grey)  # background colour
+    screen = settings.screen
+    screen.fill(settings.grey)  # background colour
     selected.update()  # updates selected sprite
     buttons.select_box.update_box(screen)  # updates highlight box
     nums.numbers.draw(screen)  # draws all the players
     buttons.buttons_group.draw(screen)
 
     """On screen messages"""
-    font = gui_settings.font
-    return_menu_msg = font.render('Press ESC to return to main menu', True, helpers.light_grey, helpers.grey)
-    undo_instr = font.render('Press Z to undo R to redo', True, helpers.light_grey, helpers.grey)
-    simplifiable = font.render(helpers.simplifiable[0], True, helpers.light_grey, helpers.grey)
+    font = settings.font
+    return_menu_msg = font.render('Press ESC to return to main menu', True, settings.light_grey, settings.grey)
+    undo_instr = font.render('Press Z to undo R to redo', True, settings.light_grey, settings.grey)
+    simplifiable = font.render(helpers.simplifiable[0], True, settings.light_grey, settings.grey)
 
     screen.blit(return_menu_msg, (670, 20))  # draws return to menu text
     screen.blit(undo_instr, (670, 40))  # draws undo redo text

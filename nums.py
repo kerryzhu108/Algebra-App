@@ -2,7 +2,8 @@ import pygame
 import helpers
 import buttons
 import menu
-from gui_settings import font
+import settings
+from settings import number_font as font
 from typing import Union
 
 
@@ -18,7 +19,7 @@ class Player(pygame.sprite.Sprite):  # properties of the numbers
         self.left_sign = ' '
         self.right_sign = ' '
         self.side = None
-        self.image = font.render(self.left_sign + ' ' + self.number, True, helpers.grey, helpers.white)
+        self.image = font.render(self.left_sign + ' ' + self.number, True, settings.grey, settings.white)
         self.rect = self.image.get_rect()
         self.rect.x = Player.position_x + 50
         self.rect.y = Player.position_y
@@ -49,14 +50,14 @@ class Player(pygame.sprite.Sprite):  # properties of the numbers
         if self.left_sign != '/':
             # renders number and left sign except for div sign
             img_and_sign = self.left_sign + ' ' + self.number
-            self.image = font.render(img_and_sign, True, helpers.white, helpers.light_grey)
+            self.image = font.render(img_and_sign, True, settings.white, settings.light_grey)
         elif self.left_sign == '/':
             # renders custom division line above division
             if self.bounded:
                 self.div_line.update_div_line(self)
             else:
                 self.div_line.update_div_line(self, numbers.sprites())
-            self.image = font.render(' '+self.number, True, helpers.white, helpers.light_grey)
+            self.image = font.render(' ' + self.number, True, settings.white, settings.light_grey)
             """if self in bracket_nums and self.left_sign != '/': # USELESS???
                 self.div_line.update_div_line(bracket_nums)"""
 
@@ -143,7 +144,7 @@ for index in range(len(equation)):
             if isinstance(equation[index-1], str) and equation[index-1] not in 'x=':
                 num.left_sign = equation[index-1]
                 # allows sign left of number to render as part of it
-                num.image = font.render(num.left_sign+num.number, True, helpers.black, helpers.white)
+                num.image = font.render(num.left_sign + num.number, True, settings.black, settings.white)
             if isinstance(equation[index+1], str) and equation[index+1] not in 'x=':
                 num.right_sign = equation[index+1]
 
