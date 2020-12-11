@@ -40,7 +40,7 @@ while running:  # main game loop
             # does so via assigning select_box a real init_pos
             if buttons.next_click_select:
                 # also resets button image
-                buttons.select.image = pygame.image.load('simplify.png')
+                buttons.select.image = pygame.image.load('images\simplify.png')
                 buttons.select_box.init_pos = pygame.mouse.get_pos()
                 buttons.next_click_select = False
                 buttons.next_click_simplify = True
@@ -87,7 +87,7 @@ while running:  # main game loop
 
             for button in buttons.buttons_group:
                 # if click on any button
-                if button.rect.x - 10 < pygame.mouse.get_pos()[0] < button.rect.x + 60 \
+                if button.rect.x - 10 < pygame.mouse.get_pos()[0] < button.rect.x + 110 \
                         and button.rect.y < pygame.mouse.get_pos()[1] < button.rect.y + 40:
                     if button == buttons.answer:  # if click on answer button, remove all number sprites
                         helpers.store_info(nums.numbers, nums.bracket_nums, nums.history,
@@ -97,7 +97,7 @@ while running:  # main game loop
                     if button == buttons.select:
                         # if click on select, select box will appear next click
                         buttons.next_click_select = True
-                        button.image = pygame.image.load('s_simplify.png')
+                        button.image = pygame.image.load('images/s_simplify.png')
 
         if past < nums.equal_sign.rect.x <= present or present <= nums.equal_sign.rect.x < past:
             # when number crosses equal sign

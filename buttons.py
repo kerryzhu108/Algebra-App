@@ -70,11 +70,11 @@ class Buttons(pygame.sprite.Sprite):
 buttons_group = pygame.sprite.Group()  # buttons sprite group
 
 answer = Buttons()  # simplifies by combining all numbers at very end
-answer.image = pygame.image.load('answer.png')
+answer.image = pygame.image.load('images/answer.png')
 answer.rect.x = 0
 
 select = Buttons()
-select.image = pygame.image.load('simplify.png')
+select.image = pygame.image.load('images/simplify.png')
 select.rect.x = 200
 
 select_box = Buttons()  # highlight box

@@ -143,7 +143,7 @@ def get_equation(user_equation: list) -> list:
     """
 
     if user_equation and user_equation[0] == "gen equation":
-        return calculate.equation_gen(3)
+        return calculate.equation_gen(user_equation[1])
     elif user_equation:
         return user_equation
     eq_pool = [[[3, '•', 'x', '•', 9, '+', 5, '/', 2, '-', 3, '=', 107], 4],
@@ -173,6 +173,8 @@ def get_info(history: list, history_index: list, undo_redo: int, numbers: 'sprit
             num.side, num.image, num.rect.x = sprite_info[4], sprite_info[5], sprite_info[6]
             num.rect.y, num.bond, num.mouse_mode = sprite_info[7], sprite_info[8], False
             num.group_move, num.bounded = False, sprite_info[9]
+            if num not in numbers:
+                numbers.add(num)
             num.update()
             num.div_line.update_div_line(num)
             # restores bracket_nums' status
