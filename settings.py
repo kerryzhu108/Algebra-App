@@ -1,4 +1,5 @@
 import pygame
+pygame.init()
 
 """Screen Settings"""
 width = 1000
@@ -15,3 +16,5 @@ black = (0, 0, 0)
 grey = (48, 48, 48)
 light_grey = (90, 90, 90)
 white = (255, 255, 255)
+green = (0, 255, 0)
+

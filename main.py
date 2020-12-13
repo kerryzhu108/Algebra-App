@@ -1,8 +1,8 @@
-import pygame
 import buttons
 import helpers
-import nums
 import importlib
+import nums
+import pygame
 import settings
 
 """Keeps track of selected number"""

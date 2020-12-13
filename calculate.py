@@ -2,12 +2,14 @@ import sympy
 import random
 
 
-def simplify(equation: list)-> list:
+def simplify(equation: list) -> list:
     """Takes in an equation in the form of a list
     such as:
     [20, '•', 'x', '+', 6, '•', 3, '•', 7, '/', 2, '=', 30]
     and returns the simplified version in the same format:
     [20, '•', 'x', '+', 63, '=', 30]
+
+    If equation is not simplifiable,, return [].
     """
     left_of_eq = ""
     right_of_eq = ""
@@ -16,6 +18,8 @@ def simplify(equation: list)-> list:
     while i < len(equation) and equation[i] != '=':
         if equation[i] == "\u2022":
             left_of_eq += '*'
+        elif equation[i] == 'x' and i > 0 and equation[i-1] not in '*•+-=/':  # deals with 5x by turning to 5*x
+            left_of_eq += '*x'
         else:
             left_of_eq += str(equation[i])
         i += 1
@@ -26,7 +30,13 @@ def simplify(equation: list)-> list:
         else:
             right_of_eq += str(equation[i])
         i += 1
-    simplified = str(sympy.simplify(left_of_eq))
+
+    try:
+        simplified = str(sympy.simplify(left_of_eq))
+
+    except SyntaxError:
+        return []
+
     if right_of_eq:
         simplified += '=' + str(sympy.simplify(right_of_eq))
     # turn string back into list format
@@ -114,3 +124,27 @@ def equation_gen(num: int) -> list:
     ans = equation_list[x_insert_position]
     equation_list[x_insert_position] = 'x'
     return [equation_list, str(ans)]
+
+
+def solve(provided_eq: str):
+    """
+    :param provided_eq: Takes in a equation in the form of 5x+2*3=3
+    returns the value of x or none if it cannot solve for x.
+    """
+    try:
+        equation = provided_eq
+        i = 0
+        current_eq_len = len(equation)
+        while i < current_eq_len:  # turns 5x into 5*x
+            if equation[i] == 'x' and i > 0 and equation[i-1] not in '*\u2022':
+                equation = equation[:i] + '*' + equation[i:]
+                i += 1
+                current_eq_len += 1
+            i += 1
+        split_eq = equation.split('=')  # splits at = sign and moves all to one side
+        left_side = split_eq[0]
+        right_side = '-1*(' + split_eq[1] + ')'
+        return sympy.solve(left_side + right_side)[0]
+    except (IndexError, SyntaxError, TypeError):
+        return None
+

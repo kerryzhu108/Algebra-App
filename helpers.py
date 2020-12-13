@@ -7,9 +7,12 @@ import calculate
 
 
 def bond_follow(sprite) -> None:
-    """Makes the sprite's bonded number (and the number its bond may be bonded to)
+    """
+    Makes the sprite's bonded number (and the number its bond may be bonded to)
     (and div_line if bonded is a denominator) follow it.
-    Precondition: Sprite must have a bonded number in the first place"""
+    Precondition: Sprite must have a bonded number in the first place
+    :param sprite: pygame sprite object
+    """
     if sprite.bond and sprite.bond.left_sign == '/' and sprite.bond.bond_follow:
         # if my bond is a denominator
         sprite.bond.rect.x = sprite.rect.x + 1
@@ -28,10 +31,14 @@ def bond_follow(sprite) -> None:
 
 
 def bracket_group_move(bracket_numbers: list, init_mouse_pos: list, init_nums_pos: list):
-    """Takes a list of bracket_numbers and moves them as a group.
-    It does so by by setting every number equal to the current
+    """
+    Moves a group of numbers together, does so by tracking the
     mouse pos plus the distance between init_nums_pos and init_mouse_pos
-    click position. This keeps every number in the same place as the mouse moves."""
+    click position. This keeps every number in the same place as the mouse moves.
+    :param bracket_numbers: A list of sprites representing the numbers enclosed between multiplication brackets
+    :param init_mouse_pos: Mouse position [x,y]
+    :param init_nums_pos: The position of those number sprites
+    """
     bracket_numbers.sort(key=operator.attrgetter('rect.x'))
     for num, pos in zip(bracket_numbers, init_nums_pos):
         num.rect.x = pygame.mouse.get_pos()[0] + (pos[0] - init_mouse_pos[0][0])
@@ -142,15 +149,15 @@ def get_equation(user_equation: list) -> list:
     ex) [8, '/', 'x', '-', 5 '=', 3], 1]
     """
 
-    if user_equation and user_equation[0] == "gen equation":
+    if user_equation and user_equation[0] == "gen equation":  # random length gen
         return calculate.equation_gen(user_equation[1])
-    elif user_equation:
+    elif user_equation:  # custom equation provided
         return user_equation
     eq_pool = [[[3, '•', 'x', '•', 9, '+', 5, '/', 2, '-', 3, '=', 107], 4],
                [[9, '/', 'x', '+', 6, '+', 2, '•', 7, '•', 4, '=', '-', 49], 3],
                [[2, '•', 8, '/', 'x', '/', 3, '-', 5, '+', 7, '=', 4], 12],
-               [[9, '/', 3, '-', 7, '+', 5, '/', 'x', '+', 4, '=', '-', 5], 7],
-               [[4, '•', 'x', '•', 6, '•', 7, '-', 3, '-', 9, '=', 492], 19]]
+               [[4, '•', 'x', '•', 6, '•', 7, '-', 3, '-', 9, '=', 492], 19],
+               [[16, '/', 2, '/', 4, '+', 8, '+', 'x', '•', 5, '=', -10], -4]]
     random_index = random.randint(0, len(eq_pool) - 1)
     return [eq_pool[random_index][0], eq_pool[random_index][1]]
 

@@ -1,3 +1,4 @@
+import calculate
 import pygame
 import sys
 
@@ -14,7 +15,7 @@ def menu(width: int, height: int, colour: tuple) -> None:
     menu_backgrounds = [[pygame.Surface((350, 70)).get_rect(y=100, x=300), light_grey],
                         [pygame.Surface((350, 70)).get_rect(y=250, x=300), light_grey],
                         [pygame.Surface((350, 70)).get_rect(y=400, x=300), light_grey],
-                        [pygame.Surface((215, 40)).get_rect(y=130, x=660), light_grey]]
+                        [pygame.Surface((150, 40)).get_rect(y=130, x=660), light_grey]]
     button_colours = [light_grey, light_grey, light_grey, light_grey]
 
     in_menu = True
@@ -25,6 +26,7 @@ def menu(width: int, height: int, colour: tuple) -> None:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # if click on random equation
                 if menu_backgrounds[0][1] == dark_grey:
+                    equation.clear()
                     in_menu = False
                 # if click on custom equation
                 elif menu_backgrounds[1][1] == dark_grey:
@@ -57,7 +59,7 @@ def menu(width: int, height: int, colour: tuple) -> None:
         rand_eq = font.render('Random Equation', True, white, button_colours[0])
         custom_eq = font.render('Custom Equation', True, white, button_colours[1])
         instructions = font.render('Instructions', True, white, button_colours[2])
-        really_rand_eq = sm_font.render('Custom Length (buggy)', True, white, button_colours[3])
+        really_rand_eq = sm_font.render('Custom Length', True, white, button_colours[3])
         screen.blit(rand_eq, pygame.Surface((0, 0)).get_rect(center=(327, 119)))
         screen.blit(custom_eq, pygame.Surface((0, 0)).get_rect(center=(327, 269)))
         screen.blit(instructions, pygame.Surface((0, 0)).get_rect(center=(370, 419)))
@@ -85,6 +87,8 @@ def enter_custom_equation(width: int, height: int, colour: tuple) -> bool:
     in_menu = True
     while in_menu:
         for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     equation.clear()
@@ -93,32 +97,42 @@ def enter_custom_equation(width: int, height: int, colour: tuple) -> bool:
                 if event.key == pygame.K_RETURN:
                     all_inputs_valid = True
                     for ch in text:
-                        if ch not in '123456789x+-/*=':
+                        if ch not in '0123456789x+-/*=':
                             text = ''
-                            bad_input = 'Error: invalid input in equation'
+                            bad_input = "Error: invalid input in equation: '" + ch + '\''
                             all_inputs_valid = False
                     if all_inputs_valid:  # if all good, turn text eq into formatted equation
-                        number = ''  #
+                        number = ''  # to collect entire number instead of just appending digit
+                        eq = []
                         for ch in text:
                             if ch.isdigit():
                                 number += ch
-                            elif number:
-                                equation.append(int(number))
-                                number = ''
+                            else:
+                                if number:
+                                    eq.append(int(float(number)))
+                                    number = ''
                                 if ch == '*':
-                                    equation.append('\u2022')
+                                    eq.append('\u2022')
                                 elif ch == 'x':
-                                    equation.append('\u2022')
-                                    equation.append('x')
+                                    if eq and eq[-1] != '\u2022':  # does 5*x if 5x is entered
+                                        eq.append('\u2022')
+                                    eq.append('x')
                                 else:
-                                    equation.append(ch)
-                            else:  # to get last number
-                                equation.append(ch)
-                        if number and '=' in equation and 'x' in equation:
-                            equation.append(int(number))
-                            return True  # if all valid, modify equation and exist this
-                        elif '=' not in equation or 'x' not in equation:
-                            bad_input = 'Please have at least one x and equal sign in equation.'
+                                    eq.append(ch)
+                        if number:  # gets last number
+                            eq.append(int(float(number)))
+                        is_simplifiable = calculate.simplify(eq)
+                        solution = calculate.solve(text)
+                        if eq == '':
+                            bad_input = "Empty equation detected."
+                        elif '=' not in eq or 'x' not in eq:
+                            bad_input = "Please have at least one 'x' and '=' in eq."
+                        elif is_simplifiable and solution is not None:
+                            equation.append(eq)
+                            equation.append(solution)
+                            return True  # if all valid, add equation and solution and exit this
+                        else:
+                            bad_input = "Error when trying to create this equation."
                 elif event.key == pygame.K_BACKSPACE:
                     text = text[:-1]
                 else:
@@ -197,6 +211,6 @@ pygame.init()
 window_width = 1000
 window_height = 600
 background_colour = (48, 48, 48)
-equation = []  # possible custom equation to display
+equation = []  # possible custom equation to display [[equation], answer]
 
 menu(window_width, window_height, background_colour)

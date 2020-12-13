@@ -1,15 +1,8 @@
-import pygame
-import operator
 import helpers
+import operator
+import pygame
+import settings
 from typing import Optional
-
-pygame.init()
-white = (255, 255, 255)
-black = (0, 0, 0)
-green = (0, 255, 0)
-grey = (48, 48, 48)
-light_grey = (131, 139, 139)
-font = pygame.font.Font('freesansbold.ttf', 32)
 
 
 class Buttons(pygame.sprite.Sprite):
@@ -31,7 +24,7 @@ class Buttons(pygame.sprite.Sprite):
             # div_line for groups
             line_len = helpers.end_pos(following)[2] + len(following[-1].number) * 23
             self.image = pygame.Surface((line_len, 4))
-            self.image.fill(white)
+            self.image.fill(settings.white)
             following.sort(key=operator.attrgetter('rect.x'))
             self.rect.x = following[0].rect.x - 5
             self.rect.y = following[0].rect.y - 10
@@ -50,7 +43,7 @@ class Buttons(pygame.sprite.Sprite):
             self.image = pygame.Surface((line_len, 4))
             self.rect.x = following.rect.x - line_shift
             self.rect.y = following.rect.y - 10
-            self.image.fill(white)
+            self.image.fill(settings.white)
 
     def update_box(self, screen):
         """ Uses init_pos to draw a dynamic rectangle box on screen.
@@ -58,13 +51,13 @@ class Buttons(pygame.sprite.Sprite):
         if self.init_pos != (-1, -1):
             wid = pygame.mouse.get_pos()[0] - self.init_pos[0]
             length = pygame.mouse.get_pos()[1] - self.init_pos[1]
-            pygame.draw.rect(screen, green, [self.init_pos[0], self.init_pos[1], wid, length], 1)
+            pygame.draw.rect(screen, settings.green, [self.init_pos[0], self.init_pos[1], wid, length], 1)
         else:
             self.image = pygame.Surface((0, 0))
 
         if next_click_select:
             mouse_pos = pygame.mouse.get_pos()
-            pygame.draw.rect(screen, green, [mouse_pos[0], mouse_pos[1], 15, 10], 1)
+            pygame.draw.rect(screen, settings.green, [mouse_pos[0], mouse_pos[1], 15, 10], 1)
 
 
 buttons_group = pygame.sprite.Group()  # buttons sprite group
