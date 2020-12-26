@@ -1,6 +1,7 @@
 # Algebra Visualizer
 Aims to help visual learners with algebra by applying bedmas rules for them as they experiment
 with moving different numbers around the equation.
+Demo: https://youtu.be/xNI0Vc43gP4
 
 ## Setup
 Install pygame and sympy or use requirments.txt
